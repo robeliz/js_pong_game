@@ -136,23 +136,37 @@
 			};
 		},
 		check_goal: function(){
+			var goal = false;
 			if (this.board.ball.x >= 800){
 				this.marcador_a++;
-				console.log("Goal A");
+				console.log("Goal A "+this.marcador_a);
 				this.board.playing = false;
+				goal = true;
 			}else if(this.board.ball.x <= 0){
 				this.marcador_b++;
-				console.log("Goal B");
+				console.log("Goal B "+this.marcador_b);
 				this.board.playing = false;
+				goal = true;
 			}
-			return;
+			return goal;
+		},
+		refresh_scoreboard: function(){
+			var sbA = document.getElementById('teamA').innerHTML = this.marcador_a.toString();
+			var sbB = document.getElementById('teamB').innerHTML = this.marcador_b.toString();
 		},
 		play: function(){
 			if(this.board.playing){
 				this.clean();
 				this.draw();
 				this.check_collisions();
-				this.check_goal();
+				if (this.check_goal()=== true){
+					this.refresh_scoreboard();
+					this.board.ball.x = 400;
+					this.board.ball.y = 200;
+					this.clean();
+					this.draw();
+					this.board.playing = false;
+				}
 				this.board.ball.move();	
 			}
 			
@@ -205,11 +219,11 @@
 })();
 
 var board = new Board(800,400);
-var bar = new Bar(20,100,40,100,board);
-var bar_2 = new Bar(735,100,40,100,board);
+var bar = new Bar(20,150,40,100,board);
+var bar_2 = new Bar(735,150,40,100,board);
 var canvas = document.getElementById('canvas');
 var board_view = new BoardView(canvas,board);
-var ball = new Ball(350, 100, 10,board);
+var ball = new Ball(400, 200, 10,board);
 
 
 document.addEventListener("keydown",function(ev){
